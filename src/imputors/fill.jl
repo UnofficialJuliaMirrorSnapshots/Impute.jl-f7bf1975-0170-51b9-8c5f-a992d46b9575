@@ -38,13 +38,13 @@ function impute!(data::AbstractVector, imp::Fill)
     imp.context() do c
         fill_val = if isa(imp.value, Function)
             # Call `deepcopy` because we can trust that it's available for all types.
-            imp.value(Impute.drop(deepcopy(data); context=c))
+            imp.value(Impute.drop(data; context=c))
         else
             imp.value
         end
 
         for i in eachindex(data)
-            if ismissing(c, data[i])
+            if ismissing!(c, data[i])
                 data[i] = fill_val
             end
         end
